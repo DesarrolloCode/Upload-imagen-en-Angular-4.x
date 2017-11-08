@@ -1,0 +1,123 @@
+<div class="container registro" style="text-align: center">
+  <img class="card-img-top text-center"
+       src="http://res.cloudinary.com/desarrollocode/image/upload/v1510164047/oteyximgwsn6xjj9gor9.png"
+       width="300" height="100" alt="Card image cap" >
+  <br>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="col-md-12">
+        <div>
+          <label type="button"  class = "btn btn-info btn-lg active" id="seleccionarImagen">
+            Seleccionar Imágenes <input  type="file" ng2FileSelect [uploader]="uploader" style="display: none;" multiple>
+            <span class="fa fa-folder-open-o" aria-hidden="true"></span>
+          </label>
+          <p>Imágenes a subir: {{ uploader?.queue?.length }}</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10">
+            <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                 (fileOver)="fileOverBase($event)" [uploader]="uploader"
+                 class="well my-drop-zone" style="text-align: center"><p>Arrastrar imagen aqui...</p>
+            </div>
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <table class="table">
+            <thead>
+            <tr>
+              <th >Nombre</th>
+              <th >Tamaño</th>
+              <th >Progreso</th>
+              <th >Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of uploader.queue">
+              <td>{{ item?.file?.name }}</td>
+              <td>{{item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+              <td>
+                <div class="progress" style="margin-bottom: 0;">
+                  <div class="progress-bar progress-bar-striped bg-info"
+                       [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                </div>
+              </td>
+              <td >
+                <button id="botonesTabla" type="button" class="btn btn-secondary"
+                        (click)="item.upload()"
+                        [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                  <span class="fa fa-upload"></span> Cargar
+                </button>
+                <!--<button id="botonesTabla" type="button" class="btn btn-secondary"
+                        (click)="item.cancel()" [disabled]="!item.isUploading">
+                  <span class="fa fa-ban"></span> Cancelar
+                </button>-->
+                <button id="botonesTabla" type="button" class="btn btn-secondary"
+                        (click)="item.remove()">
+                  <span class="fa fa-trash"></span> Eliminar
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div style="text-align: center">
+            <div>
+              Barra de Progreso:
+              <div class="progress" style="">
+                <div class="progress-bar progress-bar-striped" role="progressbar"
+                     [ngStyle]="{ 'width': uploader.progress + '%' }" aria-valuenow="uploader.progress" aria-valuemin="0" aria-valuemax="100">
+                  {{uploader.progress + '%'}}
+                </div>
+              </div>
+            </div>
+            <br>
+            <button type="button" class="btn btn-success btn-s"
+                    (click)="uploader.uploadAll()"
+                    [disabled]="!uploader.getNotUploadedItems().length">
+              <span class="fa fa-upload"></span> Cargar Todo
+            </button>
+            <!--<button type="button" class="btn btn-warning btn-s"
+                    (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+              <span class="fa fa-ban"></span> Cancelar todo
+            </button>-->
+            <button type="button" class="btn btn-danger btn-s"
+                    (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+              <span class="fa fa-trash"></span> Eliminar Todo
+            </button>
+          </div>
+
+        </div>
+        <br>
+        <div class="col-md-1"><button type="button" class="btn btn-success btn-s"
+                                      (click)="cargar()">Guardar</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <br><br>
+
+  <div class="card text-center " *ngFor=" let usuario  of listaCategorias; let i = index" >
+    <h3>Imagenes Subidas</h3>
+    <p>{{i}}</p>
+    <p>{{usuario.imagen}}</p>
+    <div class="card-block">
+      <div class="row">
+        <div class="col-md-4" *ngFor="let img of usuario.imagen; let j = index">
+          <img class="card-img-top text-center"  [src]="img" width="100" height="100" alt="Card image cap" >
+          <p>{{j}}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
